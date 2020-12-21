@@ -25,3 +25,6 @@ require (
 replace github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.2-alpha.regen.4
 
 replace github.com/gogo/grpc => google.golang.org/grpc v1.33.2
+
+// At least until IBC is sorted out with the 'peggy/' native denom prefix.
+replace github.com/cosmos/cosmos-sdk => github.com/agoric-labs/cosmos-sdk v0.40.0-rc4.0.20201221162547-6f2183a89279
