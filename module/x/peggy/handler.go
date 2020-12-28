@@ -54,7 +54,8 @@ func handleDepositClaim(ctx sdk.Context, keeper keeper.Keeper, msg *types.MsgDep
 	attestationIDs = append(attestationIDs, types.GetAttestationKey(att.EventNonce, msg))
 
 	return &sdk.Result{
-		Data: bytes.Join(attestationIDs, []byte(", ")),
+		Data:   bytes.Join(attestationIDs, []byte(", ")),
+		Events: ctx.EventManager().Events().ToABCIEvents(),
 	}, nil
 }
 
@@ -75,7 +76,8 @@ func handleWithdrawClaim(ctx sdk.Context, keeper keeper.Keeper, msg *types.MsgWi
 	attestationIDs = append(attestationIDs, types.GetAttestationKey(att.EventNonce, msg))
 
 	return &sdk.Result{
-		Data: bytes.Join(attestationIDs, []byte(", ")),
+		Data:   bytes.Join(attestationIDs, []byte(", ")),
+		Events: ctx.EventManager().Events().ToABCIEvents(),
 	}, nil
 }
 
@@ -95,7 +97,8 @@ func handleMsgValsetRequest(ctx sdk.Context, keeper keeper.Keeper, msg *types.Ms
 	//}
 	v := keeper.SetValsetRequest(ctx)
 	return &sdk.Result{
-		Data: types.UInt64Bytes(v.Nonce),
+		Data:   types.UInt64Bytes(v.Nonce),
+		Events: ctx.EventManager().Events().ToABCIEvents(),
 	}, nil
 }
 
@@ -138,7 +141,8 @@ func handleMsgConfirmBatch(ctx sdk.Context, keeper keeper.Keeper, msg *types.Msg
 	}
 	key := keeper.SetBatchConfirm(ctx, msg)
 	return &sdk.Result{
-		Data: key,
+		Data:   key,
+		Events: ctx.EventManager().Events().ToABCIEvents(),
 	}, nil
 }
 
@@ -178,7 +182,8 @@ func handleMsgConfirmValset(ctx sdk.Context, keeper keeper.Keeper, msg *types.Ms
 	}
 	key := keeper.SetValsetConfirm(ctx, *msg)
 	return &sdk.Result{
-		Data: key,
+		Data:   key,
+		Events: ctx.EventManager().Events().ToABCIEvents(),
 	}, nil
 }
 
@@ -190,7 +195,9 @@ func handleMsgSetEthAddress(ctx sdk.Context, keeper keeper.Keeper, msg *types.Ms
 	}
 
 	keeper.SetEthAddress(ctx, sdk.AccAddress(validator), msg.Address)
-	return &sdk.Result{}, nil
+	return &sdk.Result{
+		Events: ctx.EventManager().Events().ToABCIEvents(),
+	}, nil
 }
 
 func handleMsgSendToEth(ctx sdk.Context, keeper keeper.Keeper, msg *types.MsgSendToEth) (*sdk.Result, error) {
@@ -200,7 +207,8 @@ func handleMsgSendToEth(ctx sdk.Context, keeper keeper.Keeper, msg *types.MsgSen
 		return nil, err
 	}
 	return &sdk.Result{
-		Data: sdk.Uint64ToBigEndian(txID),
+		Data:   sdk.Uint64ToBigEndian(txID),
+		Events: ctx.EventManager().Events().ToABCIEvents(),
 	}, nil
 }
 
@@ -216,6 +224,7 @@ func handleMsgRequestBatch(ctx sdk.Context, k keeper.Keeper, msg *types.MsgReque
 		return nil, err
 	}
 	return &sdk.Result{
-		Data: types.UInt64Bytes(batchID.BatchNonce),
+		Data:   types.UInt64Bytes(batchID.BatchNonce),
+		Events: ctx.EventManager().Events().ToABCIEvents(),
 	}, nil
 }

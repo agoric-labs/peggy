@@ -153,6 +153,7 @@ func (k Keeper) processAttestation(ctx sdk.Context, att *types.Attestation, clai
 		)
 	} else {
 		commit() // persist transient storage
+		ctx.EventManager().EmitEvents(xCtx.EventManager().Events())
 	}
 }
 
