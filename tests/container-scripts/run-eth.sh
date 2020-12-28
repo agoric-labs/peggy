@@ -11,8 +11,8 @@ geth --identity "PeggyTestnet" \
 geth --identity "PeggyTestnet" --nodiscover \
 --networkid 15 \
 --mine \
---rpc \
 --http \
+--http.addr 0.0.0.0 --http.vhosts '*' \
 --minerthreads=1 \
 --nousb \
 --verbosity=5 \
