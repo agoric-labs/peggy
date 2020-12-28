@@ -18,7 +18,7 @@ GAIA_HOME="--home /validator$i"
 if [[ "$i" -eq 1 ]]; then
 # node one gets localhost so we can easily shunt these ports
 # to the docker host
-RPC_ADDRESS="--rpc.laddr tcp://0.0.0.0:26657"
+RPC_ADDRESS="--rpc.laddr tcp://0.0.0.0:26657 --pruning=nothing"
 GRPC_ADDRESS="--grpc.address 0.0.0.0:9090"
 else
 # move these to another port and address, not becuase they will
