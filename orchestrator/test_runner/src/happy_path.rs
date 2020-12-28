@@ -68,6 +68,14 @@ pub async fn happy_path_test(
 
     // bootstrapping tests finish here and we move into operational tests
 
+    if Some("MANUAL_DEMO") == option_env!("TEST_TYPE") {
+      info!("Running manual demo");
+      test_valset_update(&contact, &web30, &keys, peggy_address, fee.clone()).await;
+      info!("Waiting for orchestrators");
+      Arbiter::local_join().await;
+      return
+    }
+
     // send 3 valset updates to make sure the process works back to back
     for _ in 0u32..2 {
         test_valset_update(&contact, &web30, &keys, peggy_address, fee.clone()).await;

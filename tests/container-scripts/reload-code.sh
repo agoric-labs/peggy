@@ -16,16 +16,21 @@ do
 done
 
 
+# Do all the building before launching any chains.
 cd /peggy/module/
 make
 make install
+cd /peggy/orchestrator/test_runner
+DEPLOY_CONTRACTS=1 TEST_TYPE=$TEST_TYPE NO_GAS_OPT=1 \
+  PATH=$PATH:$HOME/.cargo/bin cargo build --release --bin test-runner
+
 cd /peggy/
 tests/container-scripts/setup-validators.sh $NODES
 tests/container-scripts/run-testnet.sh $NODES
 
 # deploy the ethereum contracts
 pushd /peggy/orchestrator/test_runner
-DEPLOY_CONTRACTS=1 RUST_BACKTRACE=full TEST_TYPE=$TEST_TYPE NO_GAS_OPT=1 RUST_LOG=INFO PATH=$PATH:$HOME/.cargo/bin cargo run --release --bin test-runner
+RUST_BACKTRACE=full RUST_LOG=INFO ../target/release/test-runner
 
 # This keeps the script open to prevent Docker from stopping the container
 # immediately if the nodes are killed by a different process
